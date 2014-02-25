@@ -1,3 +1,3 @@
 require 'rspec'
 
-require 'dot_file'
+require 'dotbox'
