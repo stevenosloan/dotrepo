@@ -141,7 +141,7 @@ describe Dotbox::DotFile do
     end
   end
 
-  describe "#symlink_to_destination" do
+  describe "#symlink_to_destination!" do
 
     let(:manager_double) {
       double("Manager",
@@ -154,7 +154,94 @@ describe Dotbox::DotFile do
       expect( File ).to receive(:symlink)
                     .with("/destination/foo/bar","/source/foo/bar")
 
-      subject.symlink_to_destination
+      subject.symlink_to_destination!
+    end
+  end
+
+  describe "#symlink_to_destination" do
+
+    let(:manager_double) {
+      double("Manager",
+              source: "/source",
+              destination: "/destination" )
+    }
+    let(:subject) {
+      described_class.new "foo/bar", manager_double
+    }
+
+    context "when already linked" do
+      it "skips linking" do
+        subject = described_class.new ".path", manager_double
+        allow( subject ).to receive(:linked?)
+                        .and_return(true)
+
+        expect( subject ).not_to receive(:symlink_to_destination!)
+        subject.symlink_to_destination
+      end
+    end
+
+    context "when destination exists as file" do
+
+      before :each do
+        allow( File ).to receive(:exist?).and_call_original
+        allow( File ).to receive(:exist?)
+                     .with("/destination/foo/bar")
+                     .and_return(true)
+        allow( subject ).to receive(:symlink_to_destination!) # just to kill it from trying to actually symlink anything
+      end
+
+      it "asks to backup or skip" do
+        out = CatchAndRelease::Catch.stdout do
+          CatchAndRelease::Release.stdin 'n' do
+            subject.symlink_to_destination
+          end
+        end
+
+        expect( out ).to match /^#{"/destination/foo/bar exists. backup existing file and link?"}/
+      end
+
+      context "user says skip" do
+        it "skips linking" do
+          expect( subject ).not_to receive(:symlink_to_destination!)
+
+          CatchAndRelease::Release.stdin 'n' do
+            subject.symlink_to_destination
+          end
+        end
+      end
+
+      context "user says backup" do
+        it "backs up destination file" do
+          expect( subject ).to receive(:backup_destination)
+
+          CatchAndRelease::Release.stdin 'y' do
+            subject.symlink_to_destination
+          end
+        end
+        it "symlinks to destination" do
+          allow( subject ).to receive(:backup_destination)
+          expect( subject ).to receive(:symlink_to_destination!)
+
+          CatchAndRelease::Release.stdin 'y' do
+            subject.symlink_to_destination
+          end
+        end
+      end
+    end
+
+    context "when destination doesn't exist" do
+
+      before :each do
+        allow( File ).to receive(:exist?)
+                     .with("/destination/foo/bar")
+                     .and_return(false)
+      end
+
+      it "symlinks file to destination" do
+        expect( subject ).to receive(:symlink_to_destination!)
+        subject.symlink_to_destination
+      end
+
     end
   end
 

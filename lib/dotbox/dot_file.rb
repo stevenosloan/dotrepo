@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module Dotbox
   class DotFile
     attr_reader :path, :source, :destination
@@ -29,6 +27,19 @@ module Dotbox
     end
 
     def symlink_to_destination
+      return if linked?
+
+      if destination_exists?
+        print "#{destination} exists. backup existing file and link? (y|n) "
+        input = $stdin.gets.chomp
+        return unless input.downcase == "y"
+
+        backup_destination
+      end
+      symlink_to_destination!
+    end
+
+    def symlink_to_destination!
       File.symlink destination, source
     end
 
