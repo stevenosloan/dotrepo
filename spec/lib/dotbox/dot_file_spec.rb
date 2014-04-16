@@ -5,9 +5,9 @@ describe Dotbox::DotFile do
   describe "#initialize" do
 
     let(:manager_double) {
-      double("Manager",
-              source: "/source",
-              destination: "/destination" )
+      instance_double("Dotbox::DotManager",
+                      source: "/source",
+                      destination: "/destination" )
     }
     let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
 
@@ -25,9 +25,9 @@ describe Dotbox::DotFile do
   describe "#source_exists?" do
 
     let(:manager_double) {
-      double("Manager",
-              source: "/source",
-              destination: "/destination" )
+      instance_double("Dotbox::DotManager",
+                      source: "/source",
+                      destination: "/destination" )
     }
     let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
 
