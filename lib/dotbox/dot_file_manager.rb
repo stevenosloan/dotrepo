@@ -1,6 +1,5 @@
 module Dotbox
-  class DotManager
-
+  class DotFileManager
     attr_reader :source, :destination
 
     def initialize source, destination

@@ -5,7 +5,7 @@ describe Dotbox::DotFile do
   describe "#initialize" do
 
     let(:manager_double) {
-      instance_double("Dotbox::DotManager",
+      instance_double("Dotbox::DotFileManager",
                       source: "/source",
                       destination: "/destination" )
     }
@@ -25,7 +25,7 @@ describe Dotbox::DotFile do
   describe "#source_exists?" do
 
     let(:manager_double) {
-      instance_double("Dotbox::DotManager",
+      instance_double("Dotbox::DotFileManager",
                       source: "/source",
                       destination: "/destination" )
     }

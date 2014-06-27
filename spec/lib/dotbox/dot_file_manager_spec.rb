@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Dotbox::DotManager do
+describe Dotbox::DotFileManager do
 
   after :each do
     Given.cleanup!
@@ -8,7 +8,7 @@ describe Dotbox::DotManager do
 
   describe "#initialize" do
     it "sets given source & destination" do
-      subject = Dotbox::DotManager.new "source", "destination"
+      subject = Dotbox::DotFileManager.new "source", "destination"
 
       expect( subject.source ).to eq "source"
       expect( subject.destination ).to eq "destination"
@@ -18,7 +18,7 @@ describe Dotbox::DotManager do
   describe "#dotfiles" do
     it "returns DotFiles" do
       Given.file '.bashrc'
-      subject = Dotbox::DotManager.new Given::TMP, "destination"
+      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
 
       expect( subject.dotfiles.first ).to be_a Dotbox::DotFile
     end
@@ -28,7 +28,7 @@ describe Dotbox::DotManager do
       Given.file 'foo_bar'
       Given.file 'dir/.dot'
       Given.file 'dir/file'
-      subject = Dotbox::DotManager.new Given::TMP, "destination"
+      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
 
       expect( subject.dotfiles.map { |df| df.path } ).to match_array [".bashrc","dir/.dot"]
     end
@@ -39,7 +39,7 @@ describe Dotbox::DotManager do
       dotfile_one = instance_double("Dotbox::DotFile")
       dotfile_two = instance_double("Dotbox::DotFile")
 
-      subject = Dotbox::DotManager.new "source", "destination"
+      subject = Dotbox::DotFileManager.new "source", "destination"
       allow( subject ).to receive(:dotfiles)
                       .and_return [dotfile_one, dotfile_two]
 
