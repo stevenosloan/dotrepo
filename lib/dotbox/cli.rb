@@ -11,7 +11,10 @@ module Dotbox
 
     desc "info", "display current configuration"
     def info
-      # dump the config info
+      config = Dotbox::ConfigFile.new
+      [:source, :destination].each do |attr|
+        shell.say_status "#{attr}:", config.send(attr), :bold
+      end
     end
 
     desc "setup", "setup your dotbox"
