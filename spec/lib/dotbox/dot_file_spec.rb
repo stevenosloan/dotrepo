@@ -152,7 +152,7 @@ describe Dotbox::DotFile do
 
     it "symlinks source to destination" do
       expect( File ).to receive(:symlink)
-                    .with("/destination/foo/bar","/source/foo/bar")
+                    .with("/source/foo/bar","/destination/foo/bar")
 
       subject.symlink_to_destination!
     end

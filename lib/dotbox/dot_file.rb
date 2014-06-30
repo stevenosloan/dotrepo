@@ -40,7 +40,7 @@ module Dotbox
     end
 
     def symlink_to_destination!
-      File.symlink destination, source
+      File.symlink source, destination
     end
 
   end
