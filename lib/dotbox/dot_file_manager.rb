@@ -10,6 +10,7 @@ module Dotbox
     def dotfiles
       Dir.glob( File.join( source, '**/.*' ) )
          .map { |f| f.sub( /#{source}\/?/, '' ) }
+         .reject { |f| f.match /.git/ }
          .map { |path| DotFile.new( path, self ) }
     end
 

@@ -32,6 +32,14 @@ describe Dotbox::DotFileManager do
 
       expect( subject.dotfiles.map { |df| df.path } ).to match_array [".bashrc","dir/.dot"]
     end
+
+    it "ignores git related files" do
+      Given.file '.git/config'
+      Given.file '.gitignore'
+      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
+
+      expect( subject.dotfiles.map { |df| df.path } ).to be_empty
+    end
   end
 
   describe "#symlink_dotfiles" do
