@@ -7,10 +7,10 @@ describe Dotbox::DotFileManager do
   end
 
   describe "#initialize" do
-    it "sets given source & destination" do
+    it "sets given expanded source & destination" do
       subject = Dotbox::DotFileManager.new "source", "destination"
 
-      expect( subject.source ).to eq "source"
+      expect( subject.source ).to eq File.expand_path("source")
       expect( subject.destination ).to eq "destination"
     end
   end

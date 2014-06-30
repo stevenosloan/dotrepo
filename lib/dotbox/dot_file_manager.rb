@@ -3,7 +3,7 @@ module Dotbox
     attr_reader :source, :destination
 
     def initialize source, destination
-      @source      = source
+      @source      = File.expand_path( source )
       @destination = destination
     end
 
