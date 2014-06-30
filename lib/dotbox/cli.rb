@@ -18,7 +18,17 @@ module Dotbox
     end
 
     desc "setup", "setup your dotbox"
+    method_option :repo,
+                  aliases: "-r",
+                  desc: "repo to pull dotfiles from"
     def setup
+      unless options[:repo]
+        shell.say_status "error", "you must specify a repo", :red
+        return
+      end
+
+      system "git clone #{options[:repo]} #{config.source}"
+      DotFileManager.new( config.source, config.destination ).symlink_dotfiles
       # runs the manager to symlink files
     end
 
@@ -30,6 +40,12 @@ module Dotbox
       # - does the source have any dotfiles
       # - does the destination exist
     end
+
+    private
+
+      def config
+        @_config ||= Dotbox::ConfigFile.new
+      end
 
   end
 end
