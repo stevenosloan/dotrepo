@@ -4,7 +4,7 @@ module Dotbox
 
     def initialize source, destination
       @source      = File.expand_path( source )
-      @destination = destination
+      @destination = File.expand_path( destination )
     end
 
     def dotfiles

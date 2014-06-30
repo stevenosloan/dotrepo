@@ -11,7 +11,7 @@ describe Dotbox::DotFileManager do
       subject = Dotbox::DotFileManager.new "source", "destination"
 
       expect( subject.source ).to eq File.expand_path("source")
-      expect( subject.destination ).to eq "destination"
+      expect( subject.destination ).to eq File.expand_path("destination")
     end
   end
 
