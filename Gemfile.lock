@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dotbox (0.0.1)
+    dotrepo (0.0.1)
       thor
 
 GEM
@@ -49,6 +49,6 @@ PLATFORMS
 DEPENDENCIES
   asgit
   catch_and_release
-  dotbox!
+  dotrepo!
   pry-byebug
   rspec (= 3.0.0.beta2)

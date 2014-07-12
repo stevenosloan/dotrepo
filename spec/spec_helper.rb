@@ -20,4 +20,4 @@ unless ENV['VERBOSE']
   $stderr = stderr
 end
 
-require 'dotbox'
+require 'dotrepo'

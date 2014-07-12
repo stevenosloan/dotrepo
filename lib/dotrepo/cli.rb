@@ -1,17 +1,17 @@
 require 'thor'
-require 'dotbox'
+require 'dotrepo'
 
-module Dotbox
+module Dotrepo
   class CLI < Thor
 
     desc "version", "display version"
     def version
-      say "Dotbox::VERSION #{Dotbox::VERSION}"
+      say "Dotrepo::VERSION #{Dotrepo::VERSION}"
     end
 
     desc "info", "display current configuration"
     def info
-      config = Dotbox::ConfigFile.new
+      config = Dotrepo::ConfigFile.new
       [:source, :destination].each do |attr|
         shell.say_status "#{attr}:", config.send(attr), :bold
       end
@@ -29,7 +29,16 @@ module Dotbox
 
       system "git clone #{options[:repo]} #{config.source}"
       DotFileManager.new( config.source, config.destination ).symlink_dotfiles
-      # runs the manager to symlink files
+    end
+
+    desc "refresh", "update linked dotfiles"
+    def refresh
+      # runs the manager again to symlink new files & prune abandoned files
+      DotFileManager.new( config.source, config.destination ).symlink_dotfiles
+    end
+
+    dec "uninstall", "revert symlinked files to plain dotfiles"
+    def uninstall
     end
 
     desc "doctor", "analyze your setup for common issues"
@@ -44,7 +53,7 @@ module Dotbox
     private
 
       def config
-        @_config ||= Dotbox::ConfigFile.new
+        @_config ||= Dotrepo::ConfigFile.new
       end
 
   end

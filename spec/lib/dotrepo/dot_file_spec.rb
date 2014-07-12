@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe Dotbox::DotFile do
+describe Dotrepo::DotFile do
 
   describe "#initialize" do
 
     let(:manager_double) {
-      instance_double("Dotbox::DotFileManager",
+      instance_double("Dotrepo::DotFileManager",
                       source: "/source",
                       destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
     it "sets the given path" do
       expect( subject.path ).to eq "/foo/bar"
@@ -25,11 +25,11 @@ describe Dotbox::DotFile do
   describe "#source_exists?" do
 
     let(:manager_double) {
-      instance_double("Dotbox::DotFileManager",
+      instance_double("Dotrepo::DotFileManager",
                       source: "/source",
                       destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
     it "is true if source exists" do
       allow( File ).to receive(:exist?).with("/source/foo/bar")
@@ -52,7 +52,7 @@ describe Dotbox::DotFile do
               source: "/source",
               destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
     it "is true if destination exists" do
       allow( File ).to receive(:exist?).with("/destination/foo/bar")
@@ -74,7 +74,7 @@ describe Dotbox::DotFile do
               source: "/source",
               destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
     it "moves destination file to backup name" do
       expect( File ).to receive(:rename)
@@ -90,7 +90,7 @@ describe Dotbox::DotFile do
               source: "/source",
               destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
 
     it "is false if destination doesn't exist" do
@@ -148,7 +148,7 @@ describe Dotbox::DotFile do
               source: "/source",
               destination: "/destination" )
     }
-    let(:subject) { Dotbox::DotFile.new("/foo/bar", manager_double) }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
 
     it "symlinks source to destination" do
       expect( File ).to receive(:symlink)

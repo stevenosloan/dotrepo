@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Dotbox::DotFileManager do
+describe Dotrepo::DotFileManager do
 
   after :each do
     Given.cleanup!
@@ -8,7 +8,7 @@ describe Dotbox::DotFileManager do
 
   describe "#initialize" do
     it "sets given expanded source & destination" do
-      subject = Dotbox::DotFileManager.new "source", "destination"
+      subject = Dotrepo::DotFileManager.new "source", "destination"
 
       expect( subject.source ).to eq File.expand_path("source")
       expect( subject.destination ).to eq File.expand_path("destination")
@@ -18,9 +18,9 @@ describe Dotbox::DotFileManager do
   describe "#dotfiles" do
     it "returns DotFiles" do
       Given.file '.bashrc'
-      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
+      subject = Dotrepo::DotFileManager.new Given::TMP, "destination"
 
-      expect( subject.dotfiles.first ).to be_a Dotbox::DotFile
+      expect( subject.dotfiles.first ).to be_a Dotrepo::DotFile
     end
 
     it "returns an array of only dotfiles from source" do
@@ -28,7 +28,7 @@ describe Dotbox::DotFileManager do
       Given.file 'foo_bar'
       Given.file 'dir/.dot'
       Given.file 'dir/file'
-      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
+      subject = Dotrepo::DotFileManager.new Given::TMP, "destination"
 
       expect( subject.dotfiles.map { |df| df.path } ).to match_array [".bashrc","dir/.dot"]
     end
@@ -36,7 +36,7 @@ describe Dotbox::DotFileManager do
     it "ignores git related files" do
       Given.file '.git/config'
       Given.file '.gitignore'
-      subject = Dotbox::DotFileManager.new Given::TMP, "destination"
+      subject = Dotrepo::DotFileManager.new Given::TMP, "destination"
 
       expect( subject.dotfiles.map { |df| df.path } ).to be_empty
     end
@@ -44,10 +44,10 @@ describe Dotbox::DotFileManager do
 
   describe "#symlink_dotfiles" do
     it "calls symlink_to_destination on each dotfile" do
-      dotfile_one = instance_double("Dotbox::DotFile")
-      dotfile_two = instance_double("Dotbox::DotFile")
+      dotfile_one = instance_double("Dotrepo::DotFile")
+      dotfile_two = instance_double("Dotrepo::DotFile")
 
-      subject = Dotbox::DotFileManager.new "source", "destination"
+      subject = Dotrepo::DotFileManager.new "source", "destination"
       allow( subject ).to receive(:dotfiles)
                       .and_return [dotfile_one, dotfile_two]
 

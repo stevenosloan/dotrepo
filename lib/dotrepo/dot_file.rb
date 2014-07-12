@@ -1,4 +1,4 @@
-module Dotbox
+module Dotrepo
   class DotFile
     attr_reader :path, :source, :destination
 

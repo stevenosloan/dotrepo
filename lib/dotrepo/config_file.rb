@@ -1,4 +1,4 @@
-module Dotbox
+module Dotrepo
   class ConfigFile
     FILE_PATH = File.join( File.expand_path("~"), ".dotbox/config" )
 
