@@ -17,7 +17,7 @@ module Dotrepo
       end
     end
 
-    desc "setup", "setup your dotbox"
+    desc "setup", "setup your dotfile repo"
     method_option :repo,
                   aliases: "-r",
                   desc: "repo to pull dotfiles from"
@@ -37,17 +37,13 @@ module Dotrepo
       DotFileManager.new( config.source, config.destination ).symlink_dotfiles
     end
 
-    dec "uninstall", "revert symlinked files to plain dotfiles"
-    def uninstall
+    desc "repo", "cd to the repo directory"
+    def repo
+      puts File.expand_path(config.source)
     end
 
-    desc "doctor", "analyze your setup for common issues"
-    def doctor
-      # do some smart checking based on info
-      # - does the source exist as a git repo
-      # - is the source up to date & free of modified files
-      # - does the source have any dotfiles
-      # - does the destination exist
+    desc "uninstall", "revert symlinked files to plain dotfiles"
+    def uninstall
     end
 
     private

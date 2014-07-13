@@ -1,4 +1,4 @@
-**dotbox**, because the world ~~didn't~~ need another dotfile manager.
+**dotrepo**, because the world ~~didn't~~ need another dotfile manager.
 
 Just a project done for fun, not due to a particular dislike of other implementations or idea that this would be any better.
 
@@ -9,89 +9,110 @@ You work on multiple machines and want to make sure that your dotfiles are easil
 
 ## Use
 
-First you need to have ruby 1.9.3+ installed, preferably with rvm.
+First you need to have ruby 1.9.3+ installed, preferably with rvm as your system default.
 
 
+### Installation
 
-## Setup a project
+#### Install as Global Gem
 
-First create a dropbox project, we'll treat this just like any other ruby app -- except we'll place it at `~/.dotbox`.
+`$ gem install dotrepo`
 
-A Gemfile
+
+#### Install to Dotrepo dir w/ rvm
+
+This is the suggested method as you don't have to worry about switching gemsets and loosing access to dotrepo -- some care needs to be takent to stick w/in compatible rubies though (1.9.3+).
+
+**First setup the repo**
+
+`$ mkdir -p ~/.dotrepo`
+
+**Add a Gemfile**
+`$ touch ~/.dotrepo/Gemfile`
+
+Then make sure the contents specify a compatible ruby version & the dotrepo gem
 
 ```ruby
-# ~/.dotbox/Gemfile
-source "https://rubygems.org"
-ruby "2.0.0"
+source 'https://rubygems.org'
+ruby '2.0.0'
 
-gem "dotbox"
+gem 'dotrepo'
 ```
 
-Ruby version files for rvm
+And bundle install generating a binstub.
 
+`$ bundle binstubs dotrepo`
+
+No we'll make a tweak to the binstub to ensure it's using the correct ruby version.
+
+The first line of `bin/dotrepo` should look like:
 ```
-# ~/.dotbox/.ruby-version
-ruby-2.0.0
-
-# ~/.dotbox/.ruby-gemset
-dotbox
+#!/usr/bin/env ruby
 ```
 
-Bundle creating the binstub for dotbox
+We'll change that to
+```
+#!/usr/bin/env rvm 2.0.0 do ruby
+```
 
+So that we're specifying the same ruby version we set in our Gemfile.
+
+**Add dotrepo to your path**
+Now in your `.bashrc` or `.bash_profile` (depending on the system you use), add:
 ```bash
-$ bundle install --binstubs
+export PATH=$PATH:$HOME/.dotrepo/bin
 ```
 
-At this point it might be a good idea to set the binstub on your path for easier access. For bash, in your `.bashrc`:
 
-```bash
-export PATH=$PATH:$HOME/.dotbox/bin
-```
-
-Reload your bash shell
-
-```bash
-$ source ~/.bashrc
-```
-
-And then push your configs (if you want them)
-
-```bash
-$ dotbox push
-```
-
-(yup, using dotbox to make dotbox work better)
+### Setup
 
 #### With an existing repo
 
 ```bash
-$ dotbox init --repo git@github.com:stevenosloan/dotbox.git
+$ dotrepo setup --repo git@github.com:stevenosloan/toolbox.git
 ```
 
-This will clone the specified repo into `~/.dotbox/source`
+This will clone the specified repo into `~/.dotrepo/repo`
 
 #### With no repo
 
 ```bash
-$ dotbox init
+$ dotrepo setup --no-repo --files .bashrc .bash_profile
 ```
 
-This will init a git repo in `~/.dotbox/source` and duplicate all dotfiles in your home directory into it. (Note that if you have any nested resources you'd like to manage you'll need to duplicate them yourself). You can then commit the files you want to track (delete the rest) and setup a remote.
+This will init a git repo in `~/.dotrepo/repo` and duplicate all specified dotfiles in your home directory into it. You can then commit the files you want to track (delete the rest) and setup a remote.
+
+
+### Continued Use
 
 ```bash
-$ dotbox update
+$ dotrepo refresh
 ```
 
-Will run the update task, that will symlink all the tracked dotfiles to their destination. In case of conflicts you'll be asked to create a `#{dotfile_name}.bak` file as a backup.
+If files have been added to the dotrepo repository, this will make an attempt to symlink those as well.
 
-#### Syncing your settings
+```bash
+$ dotrepo repo
+# => the repo directory
 
-`dotbox update`  
-Pulls remote changes into the local repository, and attempts to update the local dotfiles.
+$ cd `dotrepo repo`
+# => cd into the repo directory
+```
 
-`dotbox push`  
-Makes a naive attempt to push the local repository to the remote.
+Quick access to the repo, cd's into that directory to speed managment.
+
+
+### Uninstall
+
+We're sad to see you go, but we want to make it easy to reverse the setup.
+
+```bash
+$ dotrepo uninstall
+```
+
+Will remove the symlinks and make a copy of the symlinked files in your `~/` directory.
+
+
 
 ## Testing
 
@@ -111,4 +132,4 @@ If there is any thing you'd like to contribute or fix, please:
 
 
 ## License
-The dotbox gem is distributed under the [MIT License](LICENSE).
+The dotrepo gem is distributed under the [MIT License](LICENSE).
