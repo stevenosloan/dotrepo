@@ -1,6 +1,6 @@
 module Dotrepo
   class ConfigFile
-    FILE_PATH = File.join( File.expand_path("~"), ".dotbox/config" )
+    FILE_PATH = File.join( File.expand_path("~"), ".dotrepo/config" )
 
     attr_reader :data
 
@@ -28,7 +28,7 @@ module Dotrepo
 
       def defaults
         {
-          "source"      => '~/.dotbox/box',
+          "source"      => '~/.dotrepo/repo',
           "destination" => '~/'
         }
       end
