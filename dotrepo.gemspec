@@ -18,6 +18,6 @@ Gem::Specification.new do |gem|
   gem.require_path = "lib"
   gem.executable   = "dotrepo"
 
-  gem.add_dependency "thor"
+  gem.add_dependency "thor", "~> 0"
 
 end
