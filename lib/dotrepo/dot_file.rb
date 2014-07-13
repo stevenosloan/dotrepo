@@ -26,6 +26,25 @@ module Dotrepo
         File.readlink(destination) == source
     end
 
+    def create_linked_file!
+      if source_exists?
+        raise "Source file already exists for #{File.basename(source)}"
+      end
+
+      FileUtils.mkdir_p File.dirname(source)
+
+      if destination_exists?
+        FileUtils.cp destination, source
+        backup_destination
+      else
+        File.open( source, 'wb' ) do |file|
+          file.write ""
+        end
+      end
+
+      symlink_to_destination!
+    end
+
     def symlink_to_destination
       return if linked?
 

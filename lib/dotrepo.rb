@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils'
 
 require_relative 'dotrepo/dot_file'
 require_relative 'dotrepo/dot_file_manager'

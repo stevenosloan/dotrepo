@@ -141,6 +141,71 @@ describe Dotrepo::DotFile do
     end
   end
 
+  describe "#create_linked_file!" do
+    let(:source_dir) { File.join( Given::TMP, "source" ) }
+    let(:destination_dir) { File.join( Given::TMP, "destination" ) }
+    let(:manager_double) {
+      double("Manager",
+              source: source_dir,
+              destination: destination_dir )
+    }
+    let(:subject) { Dotrepo::DotFile.new("/foo/bar", manager_double) }
+
+    before :each do
+      FileUtils.mkdir_p( File.dirname(subject.destination) )
+    end
+
+    after :each do
+      Given.cleanup!
+    end
+
+    context "source file exists" do
+      it "raises error" do
+        allow( File ).to receive(:exist?)
+                     .with("/source/foo/bar")
+                     .and_return(true)
+
+        expect{
+          subject.create_linked_file!
+        }.to raise_error
+      end
+    end
+
+    context "destination file doesn't exist" do
+      it "creates a blank source file" do
+        subject.create_linked_file!
+        expect( File.exist?( subject.source ) ).to be_truthy
+      end
+      it "symlinks newly created source file" do
+        subject.create_linked_file!
+        expect( subject ).to be_linked
+      end
+    end
+
+    context "destination file exists" do
+      before :each do
+        Given.file File.join("destination", subject.path)
+      end
+
+      it "copies the destination to source" do
+        expect( FileUtils ).to receive(:cp)
+                           .with( File.join(destination_dir, subject.path), File.join(source_dir, subject.path) )
+                           .and_call_original
+
+        subject.create_linked_file!
+      end
+      it "backs up the destination file" do
+        expect( subject ).to receive(:backup_destination)
+                         .and_call_original
+        subject.create_linked_file!
+      end
+      it "symlinks the source file to destination" do
+        expect( subject ).to receive(:symlink_to_destination!)
+        subject.create_linked_file!
+      end
+    end
+  end
+
   describe "#symlink_to_destination!" do
 
     let(:manager_double) {
