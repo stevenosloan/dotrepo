@@ -31,7 +31,7 @@ module Dotrepo
       DotFileManager.new( config.source, config.destination ).symlink_dotfiles
     end
 
-    desc "refresh", "update linked dotfiles"
+    desc "refresh", "link new dotfiles"
     def refresh
       # runs the manager again to symlink new files & prune abandoned files
       DotFileManager.new( config.source, config.destination ).symlink_dotfiles
