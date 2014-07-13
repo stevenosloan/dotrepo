@@ -67,6 +67,7 @@ module Dotrepo
 
     desc "uninstall", "revert symlinked files to plain dotfiles"
     def uninstall
+      say "method not implemented yet"
     end
 
     private
